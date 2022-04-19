@@ -33,7 +33,27 @@ CREATE TABLE reviewers(
 );
 
 /* Table 'products' */
-CREATE TABLE products(id integer NOT NULL, PRIMARY KEY(id));
+CREATE TABLE products(
+  id integer NOT NULL,
+  r1 integer,
+  r2 integer,
+  r3 integer,
+  r4 integer,
+  r5 integer,
+  rec_true integer,
+  rec_false integer,
+  PRIMARY KEY(id)
+);
+
+/* Table 'characteristics' */
+CREATE TABLE "characteristics"(
+  id integer NOT NULL,
+  "name" text,
+  count integer,
+  total integer,
+  products_id integer NOT NULL,
+  PRIMARY KEY(id)
+);
 
 /* Relation 'reviewers_reviews' */
 ALTER TABLE reviews
@@ -49,3 +69,8 @@ ALTER TABLE reviews
 ALTER TABLE photos
   ADD CONSTRAINT reviews_photos FOREIGN KEY (reviews_id) REFERENCES reviews (id)
   ;
+
+/* Relation 'products_characteristics' */
+ALTER TABLE "characteristics"
+  ADD CONSTRAINT products_characteristics
+    FOREIGN KEY (products_id) REFERENCES products (id);
