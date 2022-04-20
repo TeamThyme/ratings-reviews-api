@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
-const db = require("./index.js");
-mongoose.Promise = global.Promise;
 
-const metadataSchema = new mongoose.Schema({
+mongoose.connect("mongodb://localhost/metadata")
+
+let metadataSchema = new mongoose.Schema({
   product_id: Number,
   ratings: {
     1: Number,
@@ -43,6 +43,6 @@ const metadataSchema = new mongoose.Schema({
   },
 });
 
-const Metadata = mongoose.model("Metadata", metadataSchema);
+let Metadata = mongoose.model("Metadata", metadataSchema);
 
-module.exports - Metadata;
+module.exports = Metadata;
