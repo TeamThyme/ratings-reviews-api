@@ -62,17 +62,9 @@ mongoose.connect("mongodb://localhost/reviews")
     },
   });
 
-  const getAll = async () => {
-    try {
-      console.log("get all or twenty...");
-      return await Reviews.find({}).exec();
-    } catch (err) {
-      console.log(err);
-    }
-  };
 
 module.exports = {
   Reviews: mongoose.model("Reviews", reviewsSchema),
   Metadata: mongoose.model("Metadata", metadataSchema),
-  getAll,
 };
+
