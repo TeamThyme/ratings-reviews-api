@@ -1,66 +1,50 @@
 const csv = require("csv-parser");
 const fs = require("fs");
-// const readline = require('readline');
+const fastcsv = require('fast-csv');
 
-const Reviews = require("../db/reviews.js");
-
-const transformData = (data) => {
-  const formattedData = {
-    id: Number(data.id),
-    product_id: Number(data.product_id),
-    rating: Number(data.rating),
-    date: Number(data.date),
-    summary: data.summary,
-    body: data.body,
-    recommend: data.recommend === 'true',
-    reported: data.reported === 'true',
-    reviewer_name: data.reviewer_name,
-    reviewer_email: data.reviewer_email,
-    response: data.response === 'null' ? null : data.response,
-    helpfulness: Number(data.helpfulness)
-  };
-  return formattedData;
-}
-
-const insertData = async (data) => {
-  return await Reviews.findOneAndUpdate({id: data.id}, data, {upsert: true});
-}
+const { Reviews } = require("../db/index.js");
 
 
-fs.createReadStream("./reviews.csv")
-.pipe(csv())
-.on("data", (data) => {
-  if (data.id < 100000) {
-    const formattedData = transformData(data);
-    insertData(formattedData);
-    console.log(formattedData.id);
-  }
-});
+const importReviews = function () {
+  let stream = fs.createReadStream('../../csvFiles/reviews.csv');
 
-// const insertByLine = async () => {
-//   const fileStream = fs.createReadStream("./reviews.csv");
+  let csvStream = fastcsv
+    .parse({ skipLines: 1 })
+    .on('data', (data) => {
+      csvStream.pause();
 
-//   const rl = readline.createInterface({ input: fileStream });
+      let formattedData = {
+        id: Number(data[0]),
+        product_id: Number(data[1]),
+        rating: Number(data[2]),
+        date: Number(data[3]),
+        summary: data[4],
+        body: data[5],
+        recommend: data[6] === "true",
+        reported: data[7] === "true",
+        reviewer_name: data[8],
+        reviewer_email: data[9],
+        response: data[10] === "null" ? null : data.response,
+        helpfulness: Number(data[11]),
+        photos: []
+      };
 
-//   for await (const review of rl) {
-//     console.log({review})
-//     Reviews.findOneAndUpdate(review.id, review, {upsert: true})
-//   }
-// }
+      Reviews.insertMany(formattedData, (err, results) => {
+        if (err) {
+          console.log('error inserting review', err);
+        } else {
+          console.log(`inserted id: ${data[0]} review`);
+          csvStream.resume();
+        }
+      });
+    })
+    .on('end', () => {
+      console.log('completed inserting reviews');
+    });
 
-// insertByLine();
+  stream.pipe(csvStream);
+};
 
-  // const dummyData = {
-  //   id: '8273',
-  //   product_id: '1415',
-  //   rating: '4',
-  //   date: '1600425805604',
-  //   summary: 'Earum blanditiis unde consequatur eaque.',
-  //   body: 'Possimus cupiditate consequatur. Delectus enim iste. Sit accusamus cum atque sint odio minus tempore. Voluptas veritatis deleniti ab.',
-  //   recommend: 'true',
-  //   reported: 'false',
-  //   reviewer_name: 'Dessie.Jacobi',
-  //   reviewer_email: 'Thelma.Schaden@gmail.com',
-  //   response: 'null',
-  //   helpfulness: '28'
-  // };
+importReviews();
+
+// module.exports = { importReviews };

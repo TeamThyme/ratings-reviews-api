@@ -1,7 +1,10 @@
-const Reviews = require("../db/reviews.js");
+const db = require('../db/dbMethods');
 
 
-Reviews.find({id: 110940}, (err, result) => {
-  console.log(result);
-})
-
+db.getAll()
+  .then(data => {
+    console.log(data)
+  })
+  .catch(err => {
+    console.error(err)
+  });
