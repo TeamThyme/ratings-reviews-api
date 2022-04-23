@@ -8,10 +8,10 @@ const formatOptions = (query) => {
   };
 
   if (query.sort === "helpful") {
-    options.sort = { helpfulness: 1 };
+    options.sort = { helpfulness: -1 };
   } else if (query.sort === "newest") {
-    options.sort = { date: 1 };
-  } else if (rquery.sort === "relevant") {
+    options.sort = { date: -1 };
+  } else if (query.sort === "relevant") {
     // TODO: how sort by relevance?
   }
   return options;

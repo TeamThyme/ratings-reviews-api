@@ -1,70 +1,53 @@
 const mongoose = require("mongoose");
 mongoose.Promise = global.Promise;
 
-mongoose.connect("mongodb://localhost/reviews")
+mongoose
+  .connect("mongodb://localhost/reviews")
   .then((res) => console.log("You are connected to the Reviews DB!"))
   .catch((err) => console.log(err));
 
-  let reviewsSchema = new mongoose.Schema({
-    id: Number,
-    product_id: Number,
-    rating: Number,
-    date: Date,
-    summary: String,
-    body: String,
-    recommend: Boolean,
-    reported: Boolean,
-    reviewer_name: String,
-    reviewer_email: String,
-    response: String,
-    helpfulness: Number,
-    photos: Array
-  });
+let reviewsSchema = new mongoose.Schema({
+  id: Number,
+  product_id: Number,
+  rating: Number,
+  date: Date,
+  summary: String,
+  body: String,
+  recommend: Boolean,
+  reported: Boolean,
+  reviewer_name: String,
+  reviewer_email: String,
+  response: String,
+  helpfulness: { type: Number, default: 0 },
+  photos: Array,
+});
 
-  let metadataSchema = new mongoose.Schema({
-    product_id: Number,
-    ratings: {
-      1: Number,
-      2: Number,
-      3: Number,
-      4: Number,
-      5: Number,
-    },
-    recommended: {
-      true: Number,
-      false: Number,
-    },
-    characteristics: {
-      Size: {
-        id: Number,
-        value: Number,
-        count: Number,
-        total: Number,
-      },
-      Width: {
-        id: Number,
-        value: Number,
-        count: Number,
-        total: Number,
-      },
-      Comfort: {
-        id: Number,
-        value: Number,
-        count: Number,
-        total: Number,
-      },
-      Quality: {
-        id: Number,
-        value: Number,
-        count: Number,
-        total: Number,
-      },
-    },
-  });
+let ratingsSchema = new mongoose.Schema({
+  product_id: { type: Number, unique: true },
+  r1: { type: Number, default: 0 },
+  r2: { type: Number, default: 0 },
+  r3: { type: Number, default: 0 },
+  r4: { type: Number, default: 0 },
+  r5: { type: Number, default: 0 },
+  rtrue: { type: Number, default: 0 },
+  rfalse: { type: Number, default: 0 },
+});
 
+let characteristicsSchema = new mongoose.Schema({
+  id: Number,
+  product_id: Number,
+  name: String,
+  char_reviews: Array,
+});
+
+let countersSchema = new mongoose.Schema({
+  review_id: Number,
+  characteristic_id: Number,
+});
 
 module.exports = {
   Reviews: mongoose.model("Reviews", reviewsSchema),
-  Metadata: mongoose.model("Metadata", metadataSchema),
+  Ratings: mongoose.model("Ratings", ratingsSchema),
+  Counters: mongoose.model("Counters", countersSchema),
+  Characteristics: mongoose.model("Characteristics", characteristicsSchema),
 };
-
