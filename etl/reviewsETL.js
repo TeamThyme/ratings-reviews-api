@@ -1,3 +1,8 @@
+/*******************************************************************/
+/* This was used before I knew how to run import or aggregate in   */
+/* the shell or terminal. Kept for reference                       */
+/*******************************************************************/
+
 const csv = require("csv-parser");
 const fs = require("fs");
 const fastcsv = require('fast-csv');

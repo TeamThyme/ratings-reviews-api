@@ -1,57 +1,56 @@
 require("dotenv").config();
 const express = require("express");
-const morgan = require('morgan');
+const morgan = require("morgan");
 
-const {Reviews} = require('../db/index.js');
-// const db = require('../db/dbMethods');
+const { Reviews, Counters, Characteristics } = require("../db/index.js");
+const helpers = require('./helpers');
 
 const app = express();
 
 app.use(express.json());
-app.use(morgan('tiny'));
-
+app.use(morgan("tiny"));
 
 app.post("/reviews", (req, res) => {
-  db.saveReview(req.body)
-    .then(() => {
-      res.sendStatus(200);
-    })
-    .catch((err) => {
-      res.send(err);
-    });
-});
-
-app.get("/postman", (req, res) => {
-  res.send("Hello Postman! Have a nice day :)");
-});
-
-
-app.get('/reviews', (req, res) => {
-  Reviews.find({product_id: 37311}).exec()
+  Reviews.create(helpers.formatSaveReview(req.body))
     .then(data => {
-      console.log(data);
-      res.send(data);
+      res.sendStatus(200);
     })
     .catch(err => {
       console.error(err);
     });
 });
-// app.get("/reviews", (req, res) => {
-//   console.log('getReviews');
-//   db.getAll()
-//     .then(data => {
-//       console.log(data);
-//     })
-//     .catch(err => {
-//       console.error(err)
-//     })
-// });
+
+app.get("/reviews", (req, res) => {
+  const options = helpers.formatOptions(req.query)
+
+  Reviews.find({ product_id: options.product_id })
+    .skip(options.count * options.page - options.count)
+    .limit(options.count)
+    .sort(options.sort)
+    .then((data) => {
+      res.send(helpers.formatReviews(data, options));
+    })
+    .catch((err) => {
+      console.error(err);
+      res.send(err);
+    });
+});
+
+app.get("/reviews/meta", async (req, res) => {
+  const reviews = await Reviews.find({product_id: req.query.product_id})
+  const chars = await Characteristics.find({product_id: req.query.product_id});
+  productData = helpers.formatRatingsData(req.query.product_id, reviews, chars);
+  res.send(productData);
+})
 
 app.post("/postman", (req, res) => {
   console.log(req.body);
   res.sendStatus(200);
 });
 
+app.get("/postman", (req, res) => {
+  res.send("Hello Postman! Have a nice day :)");
+});
 
 app.listen(process.env.PORT);
 console.log(`Listening at http://localhost:${process.env.PORT}`);

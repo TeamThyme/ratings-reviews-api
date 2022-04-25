@@ -1,3 +1,8 @@
+/*******************************************************************/
+/* This was used before I knew how to run import or aggregate in   */
+/* the shell or terminal. Kept for reference                       */
+/*******************************************************************/
+
 const mongoose = require('mongoose');
 const { Reviews } = require('../db/index.js');
 const fs = require('fs');
