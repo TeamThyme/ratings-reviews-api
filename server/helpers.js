@@ -17,6 +17,7 @@ const formatOptions = (query) => {
 };
 
 const formatReviews = (array, query) => {
+  
   const formattedArray = array
     .filter((review) => {
       return !review.reported;

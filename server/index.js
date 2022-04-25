@@ -66,8 +66,8 @@ app.put("/reviews/:review_id/report", (req, res) => {
     })
     .catch(err => {
       res.send(err);
-    })
-})
+    });
+});
 
 app.post("/postman", (req, res) => {
   console.log(req.body);
