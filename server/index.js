@@ -42,22 +42,32 @@ app.get("/reviews/meta", async (req, res) => {
     const chars = await Characteristics.find({product_id: req.query.product_id});
     productData = helpers.formatRatingsData(req.query.product_id, reviews, chars);
     res.send(productData);
-  } catch (error) {
-    res.send(error);
+  } catch (err) {
+    console.error(err);
+    res.send(err);
   }
 })
 
 app.put("/reviews/:review_id/helpful", (req, res) => {
   Reviews.findOneAndUpdate({id: req.params.review_id}, {$inc: {helpfulness: 1}})
     .then(data => {
-      res.send(data);
+      res.sendStatus(204);
     })
     .catch(err => {
       res.send(err);
     });
 });
 
-
+app.put("/reviews/:review_id/report", (req, res) => {
+  console.log(req.params.review_id);
+  Reviews.findOneAndUpdate({id: req.params.review_id}, {reported: true})
+    .then(() => {
+      res.sendStatus(204);
+    })
+    .catch(err => {
+      res.send(err);
+    })
+})
 
 app.post("/postman", (req, res) => {
   console.log(req.body);

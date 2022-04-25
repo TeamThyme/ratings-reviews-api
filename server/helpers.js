@@ -17,20 +17,24 @@ const formatOptions = (query) => {
 };
 
 const formatReviews = (array, query) => {
-  const formattedArray = array.map((review) => {
-    return {
-      review_id: review.id,
-      rating: review.rating,
-      summary: review.summary,
-      recommend: review.recommend,
-      response: review.response,
-      body: review.body,
-      date: review.date,
-      reviewer_name: review.reviewer_name,
-      helpfulness: review.helpfulness,
-      photos: review.photos,
-    };
-  });
+  const formattedArray = array
+    .filter((review) => {
+      return !review.reported;
+    })
+    .map((review) => {
+      return {
+        review_id: review.id,
+        rating: review.rating,
+        summary: review.summary,
+        recommend: review.recommend,
+        response: review.response,
+        body: review.body,
+        date: review.date,
+        reviewer_name: review.reviewer_name,
+        helpfulness: review.helpfulness,
+        photos: review.photos,
+      };
+    });
 
   return {
     product_id: query.product_id,
