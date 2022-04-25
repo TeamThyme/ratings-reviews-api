@@ -1,4 +1,3 @@
-
 const formatOptions = (query) => {
   const options = {
     product_id: Number(query.product_id) || 1,
@@ -49,8 +48,48 @@ const formatSaveReview = (review) => {
   return review;
 };
 
+const formatRatingsData = (id, reviews, chars) => {
+  const data = {
+    product_id: id.toString(),
+    ratings: {
+      1: 0,
+      2: 0,
+      3: 0,
+      4: 0,
+      5: 0,
+    },
+    recommended: { false: 0, true: 0 },
+    characteristics: {},
+  };
+
+  reviews.forEach((review) => {
+    data.ratings[review.rating] = data.ratings[review.rating] + 1;
+    data.recommended[review.recommend] = data.recommended[review.recommend] + 1;
+  });
+  chars.forEach((char) => {
+    let count = 0;
+    let total = 0;
+    char.char_reviews.forEach((review) => {
+      count++;
+      total += review.value;
+    });
+    data.characteristics[char.name] = {
+      id: char.id,
+      value: (total / count).toString(),
+    };
+  });
+  for (let key in data.ratings) {
+    data.ratings[key] = data.ratings[key].toString();
+  }
+  for (let key in data.recommended) {
+    data.recommended[key] = data.recommended[key].toString();
+  }
+  return data;
+};
+
 module.exports = {
   formatReviews,
   formatOptions,
-  formatSaveReview
+  formatSaveReview,
+  formatRatingsData,
 };

@@ -1,6 +1,7 @@
 // indices
-db.characteristics.createIndex({ id: 1, product_id: 1 });
-db.characteristic_reviews.createIndex({ characteristid_id: 1 });
+db.characteristics.createIndex({ id: 1});
+db.characteristics.createIndex({ product_id: 1 });
+db.characteristic_reviews.createIndex({ characteristic_id: 1 });
 
 // answer_photos => answers in DB: qa
 db.answers.aggregate([
@@ -72,7 +73,7 @@ db.characteristics.aggregate([
       localField: "id",
       foreignField: "characteristic_id",
       as: "char_reviews",
-    },
+    }
   },
-  { $merge: { into: "characteristics" } },
-]);
+  { $merge: { into: "characteristics" } }
+])

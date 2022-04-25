@@ -31,4 +31,4 @@ const makeReviewCounter = () => {
   db.Counters.create(counterPayload);
 }
 
-makeReviewCounter();
+//  makeReviewCounter();

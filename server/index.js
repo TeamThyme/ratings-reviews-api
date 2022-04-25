@@ -2,7 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const morgan = require("morgan");
 
-const { Reviews } = require("../db/index.js");
+const { Reviews, Counters, Characteristics } = require("../db/index.js");
 const helpers = require('./helpers');
 
 const app = express();
@@ -11,10 +11,8 @@ app.use(express.json());
 app.use(morgan("tiny"));
 
 app.post("/reviews", (req, res) => {
-  console.log('asdfasdf', helpers.formatSaveReview(req.body));
   Reviews.create(helpers.formatSaveReview(req.body))
     .then(data => {
-      console.log(data);
       res.sendStatus(200);
     })
     .catch(err => {
@@ -37,6 +35,13 @@ app.get("/reviews", (req, res) => {
       res.send(err);
     });
 });
+
+app.get("/reviews/meta", async (req, res) => {
+  const reviews = await Reviews.find({product_id: req.query.product_id})
+  const chars = await Characteristics.find({product_id: req.query.product_id});
+  productData = helpers.formatRatingsData(req.query.product_id, reviews, chars);
+  res.send(productData);
+})
 
 app.post("/postman", (req, res) => {
   console.log(req.body);

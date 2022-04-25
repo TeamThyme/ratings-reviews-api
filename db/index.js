@@ -41,6 +41,8 @@ let characteristicsSchema = new mongoose.Schema({
 });
 
 let countersSchema = new mongoose.Schema({
+  name: String,
+  directions: String,
   review_id: Number,
   characteristic_id: Number,
 });
