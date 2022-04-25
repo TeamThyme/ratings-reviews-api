@@ -43,6 +43,19 @@ app.get("/reviews/meta", async (req, res) => {
   res.send(productData);
 })
 
+app.put("/reviews/:review_id/helpful", (req, res) => {
+  console.log(req.params.review_id)
+  Reviews.findOneAndUpdate({id: req.params.review_id}, {$inc: {helpfulness: 1}})
+    .then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      res.send(err);
+    });
+  // res.sendStatus(200);
+});
+
+
 app.post("/postman", (req, res) => {
   console.log(req.body);
   res.sendStatus(200);
