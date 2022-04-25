@@ -10,10 +10,12 @@ const app = express();
 app.use(express.json());
 app.use(morgan("tiny"));
 
-app.post("/reviews", (req, res) => {
+app.post("/reviews", async (req, res) => {
+  const id = await Counters.findOneAndUpdate({name: "nextAvailableIds"}, {$inc: {review_id: 1}})
+  req.body.id = id.review_id;
   Reviews.create(helpers.formatSaveReview(req.body))
     .then(data => {
-      res.sendStatus(200);
+      res.send(data);
     })
     .catch(err => {
       console.error(err);
@@ -50,7 +52,7 @@ app.get("/reviews/meta", async (req, res) => {
 
 app.put("/reviews/:review_id/helpful", (req, res) => {
   Reviews.findOneAndUpdate({id: req.params.review_id}, {$inc: {helpfulness: 1}})
-    .then(data => {
+    .then(() => {
       res.sendStatus(204);
     })
     .catch(err => {
