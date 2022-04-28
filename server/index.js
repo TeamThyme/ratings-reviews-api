@@ -61,7 +61,6 @@ app.put("/reviews/:review_id/helpful", (req, res) => {
 });
 
 app.put("/reviews/:review_id/report", (req, res) => {
-  console.log(req.params.review_id);
   Reviews.findOneAndUpdate({id: req.params.review_id}, {reported: true})
     .then(() => {
       res.sendStatus(204);
@@ -69,15 +68,6 @@ app.put("/reviews/:review_id/report", (req, res) => {
     .catch(err => {
       res.send(err);
     });
-});
-
-app.post("/postman", (req, res) => {
-  console.log(req.body);
-  res.sendStatus(200);
-});
-
-app.get("/postman", (req, res) => {
-  res.send("Hello Postman! Have a nice day :)");
 });
 
 app.listen(process.env.PORT);
