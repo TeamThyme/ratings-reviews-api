@@ -2,7 +2,9 @@ const mongoose = require("mongoose");
 mongoose.Promise = global.Promise;
 
 
-mongoose.connect("mongodb://markalperin:password@localhost:27017/reviews?authMechanism=SCRAM-SHA-256")
+mongoose
+  .connect("mongodb://markalperin:password@localhost:27017/?authMechanism=SCRAM-SHA-256", { dbName: 'reviews' })
+  // .connect("mongodb://markalperin:password@localhost:27017/reviews?authMechanism=SCRAM-SHA-256")
   // .connect("mongodb://localhost/reviews")
   .then((res) => console.log("You are connected to the Reviews DB!"))
   .catch((err) => console.log(err));
