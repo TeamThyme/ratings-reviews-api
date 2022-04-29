@@ -5,8 +5,6 @@ mongoose.Promise = global.Promise;
 
 mongoose
   .connect(`mongodb://${process.env.USER}:${process.env.PASSWORD}@${process.env.DB_URL}:${process.env.DB_PORT}/?authMechanism=SCRAM-SHA-256`, { dbName: `${process.env.DB_NAME}` })
-  // .connect("mongodb://markalperin:password@localhost:27017/reviews?authMechanism=SCRAM-SHA-256")
-  // .connect("mongodb://localhost/reviews")
   .then((res) => console.log("You are connected to the Reviews DB!"))
   .catch((err) => console.log(err));
 
