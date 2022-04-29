@@ -42,6 +42,7 @@ app.get("/reviews/meta", async (req, res) => {
   try {
     const reviews = await Reviews.find({product_id: req.query.product_id})
     const chars = await Characteristics.find({product_id: req.query.product_id});
+    console.log(reviews, chars)
     productData = helpers.formatRatingsData(req.query.product_id, reviews, chars);
     res.send(productData);
   } catch (err) {
