@@ -70,5 +70,9 @@ app.put("/reviews/:review_id/report", (req, res) => {
     });
 });
 
+app.get("/loaderio-b578025328d5924b0060705aa2201272/", (req, res) => {
+  res.send('loaderio-b578025328d5924b0060705aa2201272');
+})
+
 app.listen(process.env.PORT);
 console.log(`Listening at http://localhost:${process.env.PORT}`);
