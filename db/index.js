@@ -6,7 +6,7 @@ mongoose.Promise = global.Promise;
 mongoose
   // .connect(`mongodb://${process.env.USER}:${process.env.PASSWORD}@${process.env.DB_URL}:${process.env.DB_PORT}/?authMechanism=SCRAM-SHA-256`, { dbName: `${process.env.DB_NAME}` })
   .connect('mongodb://markalperin:hjhdhjhd@172.31.4.64:27017/?authMechanism=SCRAM-SHA-256', { dbName: `reviews` })
-  .then((res) => console.log("You are connected to the Reviews DB!"))
+  .then((res) => console.log("You are connected to the Reviews DB!", res))
   .catch((err) => console.log(err));
 
 let reviewsSchema = new mongoose.Schema({
